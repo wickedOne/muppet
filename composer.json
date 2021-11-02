@@ -1,0 +1,65 @@
+{
+    "name": "wickedone/muppet",
+    "description": "testing your getters, setters, adders, removers, issers and whatevers",
+    "type": "library",
+    "keywords": [
+        "phpunit",
+        "testing"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "wickedOne",
+            "email": "wicliff.wolda@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "phpunit/phpunit": "^9.5",
+        "roave/better-reflection": "^4.12",
+        "laminas/laminas-code": "^4.4",
+        "doctrine/collections": "^1.6",
+        "symfony/finder": "^5.3",
+        "symfony/options-resolver": "^5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "WickedOne\\Muppet\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "WickedOne\\Muppet\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "infection/infection": "^0.25.3",
+        "friendsofphp/php-cs-fixer": "^3.2",
+        "escapestudios/symfony2-coding-standard": "^3.12",
+        "phpstan/phpstan": "^0.12.99",
+        "phpstan/phpstan-deprecation-rules": "^0.12.6",
+        "phpstan/phpstan-php-parser": "^0.12.3",
+        "phpstan/phpstan-phpunit": "^0.12.22",
+        "phpstan/phpstan-strict-rules": "^0.12.11",
+        "wickedone/phpcs-reporter": "^1.0",
+        "wickedone/phpunit-printer": "^1.0",
+        "phpmetrics/phpmetrics": "^2.7"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "0.1.x-dev"
+        }
+    },
+    "scripts": {
+        "run-phpunit": "vendor/bin/phpunit --testsuite=unit",
+        "run-phpunitc": "XDEBUG_MODE=coverage vendor/bin/phpunit --testsuite=unit --coverage-xml=build/coverage/coverage-xml --log-junit=build/coverage/junit.xml --coverage-html=build/coverage/html/",
+        "run-phpstan": "vendor/bin/phpstan",
+        "run-phpcs": "vendor/bin/phpcs",
+        "run-phpcsf": "vendor/bin/php-cs-fixer fix",
+        "run-phpmetrics": "vendor/bin/phpmetrics --config=metrics.json --report-html=build/phpmetrics --quiet",
+        "run-infection": ["@run-phpunitc", "vendor/bin/infection --coverage=build/coverage -j$(sysctl -n hw.ncpu) -s -vv"]
+    }
+}

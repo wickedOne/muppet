@@ -1,0 +1,50 @@
+{
+  "includes": [
+    "./",
+    "src"
+  ],
+  "exclude": [
+    "tests",
+    "build",
+    "public",
+    "templates",
+    "var",
+    "vendor",
+    "src/Template"
+  ],
+  "groups": [
+    {
+      "name": "Config",
+      "match": "!Config\\\\!i"
+    },
+    {
+      "name": "DocBlock",
+      "match": "!DocBlock\\\\!i"
+    },
+    {
+      "name": "Exception",
+      "match": "!Exception\\\\!i"
+    },
+    {
+      "name": "Method",
+      "match": "!Method\\\\!i"
+    },
+    {
+      "name": "Property",
+      "match": "!Property\\\\!i"
+    },
+    {
+      "name": "Tools",
+      "match": "!Tools\\\\!i"
+    }
+  ],
+  "plugins": {
+    "git": {
+      "binary": "git"
+    },
+    "junit": {
+      "report": "./build/coverage/junit.xml"
+    }
+  },
+  "extensions": [ "php", "php8" ]
+}
