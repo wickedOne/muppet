@@ -1,0 +1,6 @@
+/vendor/
+.coverage-cache/
+/build/
+.php-cs-fixer.cache
+.phpunit.result.cache
+.phpcs-cache
