@@ -18,6 +18,7 @@ use Symfony\Component\Finder\Finder;
 use WickedOne\Muppet\Config\Config;
 use WickedOne\Muppet\Config\FileConfig;
 use WickedOne\Muppet\Contract\DocBlockInterface;
+use WickedOne\Muppet\Contract\GeneratorInterface;
 use WickedOne\Muppet\DocBlock\DockBlock;
 use WickedOne\Muppet\Exception\RuntimeException;
 use WickedOne\Muppet\Method\ReadWriteTestMethod;
@@ -33,7 +34,7 @@ use WickedOne\Muppet\Tools\Reflection;
  *
  * @author wicliff <wicliff.wolda@gmail.com>
  */
-final class Generator
+final class Generator implements GeneratorInterface
 {
     /**
      * @var \WickedOne\Muppet\Config\Config
