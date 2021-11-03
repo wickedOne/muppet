@@ -66,13 +66,14 @@ final class FileConfig
         $this->file = $fileInfo->getFilenameWithoutExtension();
 
         $this->nameSpace = $matches[1];
-        $this->testNameSpace = implode('\\', array_merge($config->getFragments(), \array_slice(explode('\\', $this->nameSpace), 2)));
+        $slice = array_search('Tests', array_values($config->getFragments()), true) ?: 1;
+        $this->testNameSpace = implode('\\', array_merge($config->getFragments(), \array_slice(explode('\\', $this->nameSpace), $slice)));
 
         $this->normalizedName = preg_replace('/(?<=[a-z])(?=[A-Z])/', ' ', $this->file) ?? $this->file;
         $this->fqns = sprintf('%s\\%s', $this->nameSpace, $this->file); /* @phpstan-ignore-line */
 
         /* @infection-ignore-all */
-        $this->testPath = sprintf('%s/%s', rtrim($config->getTestDir(), '/'), implode('/', \array_slice(explode('\\', $this->nameSpace), 2)));
+        $this->testPath = sprintf('%s/%s', rtrim($config->getTestDir(), '/'), implode('/', \array_slice(explode('\\', $this->nameSpace), $slice)));
         $this->testPath = realpath($this->testPath) ?: $this->testPath;
 
         /* @infection-ignore-all */

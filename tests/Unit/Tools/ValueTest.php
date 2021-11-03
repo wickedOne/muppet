@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace WickedOne\Muppet\Tests\Unit\Tools;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use PHPUnit\Framework\TestCase;
 use Roave\BetterReflection\BetterReflection;
 use WickedOne\Muppet\Exception\LogicException;
@@ -47,7 +48,7 @@ class ValueTest extends TestCase
         $refClass = (new BetterReflection())->classReflector()->reflect(Bar::class);
         $method = $refClass->getProperty('bar');
 
-        self::assertNull(Value::getValue($method, false));
+        self::assertSame('foo', Value::getValue($method, false));
 
         $method = $refClass->getProperty('qux');
 
@@ -62,7 +63,7 @@ class ValueTest extends TestCase
         $refClass = (new BetterReflection())->classReflector()->reflect(Bar::class);
 
         self::assertSame('foo', Value::getValue($refClass->getProperty('bar'), true));
-        self::assertNull(Value::getValue($refClass->getProperty('bar'), false));
+        self::assertSame('foo', Value::getValue($refClass->getProperty('bar'), false));
         self::assertNull(Value::getValue($refClass->getProperty('qux'), false));
         self::assertNull(Value::getValue($refClass->getProperty('qux'), true));
     }
@@ -121,16 +122,21 @@ class ValueTest extends TestCase
         self::assertArrayHasKey('bar', $all);
         self::assertArrayHasKey('baz', $all);
         self::assertArrayHasKey('qux', $all);
+        self::assertArrayHasKey('boz', $all);
         self::assertSame('foo', $all['foo']);
         self::assertSame('foo', $all['baz']);
+        self::assertSame('Doctrine\Common\Collections\ArrayCollection', $all['qux']);
+        // because class_exists('\Doctrine\Common\Collections\Collection') is false?!
+        self::assertNull( $all['boz']);
         self::assertFalse($all['bar']);
 
         $all = Value::all(Foo::class, false);
 
         self::assertArrayNotHasKey('foo', $all);
-        self::assertArrayNotHasKey('baz', $all);
-        self::assertArrayNotHasKey('qux', $all);
+        self::assertArrayHasKey('baz', $all);
+        self::assertArrayHasKey('qux', $all);
         self::assertArrayHasKey('bar', $all);
+        self::assertArrayHasKey('boz', $all);
     }
 }
 
@@ -144,6 +150,11 @@ class Foo
     private ArrayCollection $qux;
     private ?string $foo;
     public bool $bar = false;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection|string[]
+     */
+    private Collection $boz;
 }
 
 class Bar

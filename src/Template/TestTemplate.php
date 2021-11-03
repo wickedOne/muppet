@@ -48,17 +48,15 @@ class TestTemplate extends TestCase
     private static array $nonNullable = [];
 
     /**
-     * @return object
-     *
      * @throws \PHPUnit\Framework\Exception
      * @throws \PHPUnit\Framework\ExpectationFailedException
      */
-    public function testReadWritePropertiesMethods(): object
+    public function testReadWritePropertiesMethods(): void
     {
         $instance = new self::$class();
 
         foreach ($this->values as $name => $value) {
-            [$reader, $writer, $remover] = self::$accessors[$name];
+            [$reader, $writer, $remover] = array_values(self::$accessors[$name]);
 
             $this->values[$name] = $value = $this->value($value);
             $instance->$writer($value);
@@ -70,16 +68,6 @@ class TestTemplate extends TestCase
             }
         }
 
-        return $instance;
-    }
-
-    /**
-     * @depends testReadWritePropertiesMethods
-     *
-     * @param object $instance
-     */
-    public function testRemovePropertyValues(object $instance): void
-    {
         foreach (self::$accessors as $property => $accessors) {
             if (null === $remover = $accessors['remover']) {
                 continue;
@@ -91,17 +79,9 @@ class TestTemplate extends TestCase
             self::assertNotContains($this->values[$property], $instance->$reader());
             self::assertFalse($instance->$remover($this->values[$property]));
         }
-    }
 
-    /**
-     * @depends testReadWritePropertiesMethods
-     *
-     * @param object $instance
-     */
-    public function testNullifyPropertyValues(object $instance): void
-    {
-        foreach (array_diff_key($this->values, self::$nonNullable) as $name => $value) {
-            [$reader, $writer] = self::$accessors[$name];
+        foreach (array_diff_key($this->values, array_flip(self::$nonNullable)) as $name => $value) {
+            [$reader, $writer] = array_values(self::$accessors[$name]);
 
             $instance->$writer(null);
 
@@ -110,9 +90,9 @@ class TestTemplate extends TestCase
     }
 
     /**
-     * @param string|int|float|bool|iterable<array-key, mixed> $value
+     * @param object|string|int|float|bool|null $value
      *
-     * @return object|string|int|float|bool|iterable<array-key, mixed>
+     * @return object|string|int|float|bool|null
      */
     private function value($value)
     {

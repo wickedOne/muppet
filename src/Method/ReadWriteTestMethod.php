@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace WickedOne\Muppet\Method;
 
-use Laminas\Code\Generator\MethodGenerator;
-use Laminas\Code\Reflection\MethodReflection;
+use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\Method;
 use WickedOne\Muppet\Contract\MethodInterface;
 use WickedOne\Muppet\Template\TestTemplate;
 
@@ -27,11 +27,11 @@ final class ReadWriteTestMethod implements MethodInterface
     /**
      * {@inheritdoc}
      */
-    public function get(string $file): MethodGenerator
+    public function get(string $file): Method
     {
-        $generator = MethodGenerator::fromReflection(new MethodReflection(TestTemplate::class, 'testReadWritePropertiesMethods'));
-        $generator->setName(sprintf('test%sReadWritePropertiesMethods', $file));
-
-        return $generator;
+        return ClassType::from(TestTemplate::class, true)
+            ->getMethod('testReadWritePropertiesMethods')
+            ->cloneWithName(sprintf('test%sReadWritePropertiesMethods', $file))
+        ;
     }
 }

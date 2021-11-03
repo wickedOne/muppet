@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace WickedOne\Muppet\Tools;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Roave\BetterReflection\BetterReflection;
 use Roave\BetterReflection\Reflection\ReflectionProperty;
 
@@ -35,11 +36,11 @@ final class Accessor
         }
 
         /** @var \ReflectionNamedType $type */
-        if ('bool' !== $type->getName() || true === $type->allowsNull()) {
-            return sprintf('get%s', ucfirst($property->getName()));
+        if ('bool' === $type->getName() && false === $type->allowsNull()) {
+            return sprintf('is%s', ucfirst($property->getName()));
         }
 
-        return sprintf('is%s', ucfirst($property->getName()));
+        return sprintf('get%s', ucfirst($property->getName()));
     }
 
     /**
@@ -110,6 +111,6 @@ final class Accessor
         $namedType = $type->getName();
 
         // tested @ \WickedOne\Muppet\Tests\Unit\Tools\AccessorTest::testIterable with property 'bor', 'bar' & 'baz'
-        return !('array' !== $namedType && ArrayCollection::class !== $namedType);
+        return \in_array($namedType, ['array', ArrayCollection::class, Collection::class], true);
     }
 }

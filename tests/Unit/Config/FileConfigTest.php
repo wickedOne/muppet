@@ -84,4 +84,29 @@ class FileConfigTest extends TestCase
 
         new FileConfig($fileInfo, $config);
     }
+
+    /**
+     * Test no `Tests` in namespace.
+     */
+    public function testNoTestsNamespace(): void
+    {
+        $fileInfo = new SplFileInfo(__DIR__.'/../../../src/Template/TestTemplate.php', __DIR__.'/../../../src/Template/TestTemplate.php', __DIR__.'/../../../src/Template');
+        $config = new Config([
+            'base_dir' => __DIR__,
+            'test_dir' => __DIR__,
+            'author' => 'foo <bar@qux.com>',
+            'fragments' => [
+                'WickedOne',
+                'Muppet',
+                'Unit',
+            ],
+        ]);
+
+        $fileConfig = new FileConfig($fileInfo, $config);
+
+        self::assertSame('WickedOne\Muppet\Unit\Muppet\Template', $fileConfig->getTestNameSpace());
+
+        rmdir($fileConfig->getTestPath());
+        rmdir(\dirname($fileConfig->getTestPath(), 1));
+    }
 }

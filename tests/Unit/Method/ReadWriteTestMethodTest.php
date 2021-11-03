@@ -30,5 +30,6 @@ class ReadWriteTestMethodTest extends TestCase
         $method = (new ReadWriteTestMethod())->get('Foo');
 
         self::assertSame('testFooReadWritePropertiesMethods', $method->getName());
+        self::assertNotEmpty($method->getBody());
     }
 }

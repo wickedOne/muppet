@@ -27,3 +27,9 @@ $config = new Config([
   ->generate('MyEntity')
 ;
 ```
+
+## assumptions
+because we love those...
+
+- iterable properties use adders and removers rather than setters
+- ``Tests`` is part of the tests namespace

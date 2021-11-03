@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace WickedOne\Muppet\Contract;
 
-use Laminas\Code\Generator\MethodGenerator;
+use Nette\PhpGenerator\Method;
 
 /**
  * Method Interface.
@@ -24,7 +24,7 @@ interface MethodInterface
     /**
      * @param string $file
      *
-     * @return \Laminas\Code\Generator\MethodGenerator
+     * @return \Nette\PhpGenerator\Method
      */
-    public function get(string $file): MethodGenerator;
+    public function get(string $file): Method;
 }

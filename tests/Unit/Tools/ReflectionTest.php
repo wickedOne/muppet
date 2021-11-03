@@ -35,26 +35,13 @@ class ReflectionTest extends TestCase
     {
         $result = Reflection::uses(Fooz::class);
 
-        self::assertCount(1, $this->filter($result, Fooz::class));
-        self::assertCount(1, $this->filter($result, Baz::class));
-        self::assertCount(0, $this->filter($result, 'bar'));
+        self::assertContains(Fooz::class, $result);
+        self::assertContains(Baz::class, $result);
+        self::assertNotContains('bar', $result);
     }
 
     /**
-     * @param array $array
-     * @param string $value
-     *
-     * @return array
-     */
-    public function filter(array $array, string $value): array
-    {
-        return array_filter($array, static function ($v) use ($value) {
-            return $value === $v || in_array($value, $v, true);
-        });
-    }
-
-    /**
-     * test non existing fully qualified space name.
+     * test non-existing fully qualified space name.
      */
     public function testNonExistentFqns(): void
     {
