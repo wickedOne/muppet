@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace WickedOne\Muppet\Contract;
 
-use Laminas\Code\Generator\PropertyGenerator;
+use Nette\PhpGenerator\Property;
 
 /**
  * Property Interface.
@@ -26,7 +26,7 @@ interface PropertyInterface
      *
      * @phpstan-param class-string $class
      *
-     * @return \Laminas\Code\Generator\PropertyGenerator
+     * @return \Nette\PhpGenerator\Property
      */
-    public function get(string $class): PropertyGenerator;
+    public function get(string $class): Property;
 }

@@ -31,6 +31,9 @@ class AccessorsPropertyTest extends TestCase
         $accessors = (new AccessorsProperty())->get(StubModel::class);
 
         self::assertSame('accessors', $accessors->getName());
-        self::assertSame(1, $accessors->getDefaultValue()->getArrayDepth());
+        self::assertTrue($accessors->isPrivate());
+        self::assertTrue($accessors->isStatic());
+        self::assertSame('array', $accessors->getType());
+        self::assertStringContainsString(\PHP_EOL.'@var array<string, array<string, string|null>>', $accessors->getComment());
     }
 }

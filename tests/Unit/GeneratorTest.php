@@ -12,9 +12,8 @@ declare(strict_types=1);
 
 namespace WickedOne\Muppet\Tests\Unit;
 
-use Laminas\Code\Generator\DocBlockGenerator;
-use Laminas\Code\Generator\MethodGenerator;
-use Laminas\Code\Generator\PropertyGenerator;
+use Nette\PhpGenerator\Method;
+use Nette\PhpGenerator\Property;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
@@ -44,13 +43,13 @@ class GeneratorTest extends TestCase
             'fragments' => [
                 'Foo',
                 'Bar',
-                'Test',
+                'Tests',
                 'Unit',
             ],
         ]);
 
         $docBlock = $this->getMockBuilder(DocBlockInterface::class)->getMock();
-        $docBlock->expects(self::once())->method('get')->willReturn(new DocBlockGenerator());
+        $docBlock->expects(self::once())->method('get')->willReturn([]);
 
         $fileInfo = new SplFileInfo(__DIR__.'/../../src/Template/TestTemplate.php', __DIR__.'/../../src/Template/TestTemplate.php', __DIR__.'/../../src/Template');
 
@@ -60,10 +59,10 @@ class GeneratorTest extends TestCase
         $finder->expects(self::once())->method('getIterator')->willReturn(new \ArrayIterator([$fileInfo]));
 
         $property = $this->getMockBuilder(PropertyInterface::class)->getMock();
-        $property->expects(self::once())->method('get')->willReturn(new PropertyGenerator());
+        $property->expects(self::once())->method('get')->willReturn(new Property('foo'));
 
         $method = $this->getMockBuilder(MethodInterface::class)->getMock();
-        $method->expects(self::once())->method('get')->willReturn(new MethodGenerator());
+        $method->expects(self::once())->method('get')->willReturn(new Method('bar'));
 
         $generator = new Generator($config, [$property], [$method], $docBlock, $finder);
         $path = $generator->generate('foo');
@@ -84,7 +83,7 @@ class GeneratorTest extends TestCase
             'fragments' => [
                 'WickedOne',
                 'Muppet',
-                'Test',
+                'Tests',
                 'Unit',
             ],
         ]);
@@ -94,16 +93,16 @@ class GeneratorTest extends TestCase
         $fileInfo = new SplFileInfo($generator->generate('StubModel'), __DIR__, __DIR__);
 
         self::assertStringContainsString('testStubModelReadWritePropertiesMethods', $fileInfo->getContents());
-        self::assertStringContainsString('testStubModelRemovePropertyValues', $fileInfo->getContents());
-        self::assertStringContainsString('testStubModelNullifyPropertyValues', $fileInfo->getContents());
         self::assertStringContainsString('private function value', $fileInfo->getContents());
-        self::assertStringContainsString('private static $class', $fileInfo->getContents());
-        self::assertStringContainsString('private $values', $fileInfo->getContents());
-        self::assertStringContainsString('private static $nonNullable', $fileInfo->getContents());
-        self::assertStringContainsString('private static $accessors', $fileInfo->getContents());
-        self::assertStringContainsString('namespace WickedOne\Muppet\Test\Unit\Tests\Stub\Model', $fileInfo->getContents());
+        self::assertStringContainsString('private static string $class', $fileInfo->getContents());
+        self::assertStringContainsString('private array $values', $fileInfo->getContents());
+        self::assertStringContainsString('private static array $nonNullable', $fileInfo->getContents());
+        self::assertStringContainsString('private static array $accessors', $fileInfo->getContents());
+        self::assertStringContainsString('namespace WickedOne\Muppet\Tests\Unit\Tests\Stub\Model', $fileInfo->getContents());
         self::assertStringContainsString('declare(strict_types=1)', $fileInfo->getContents());
         self::assertStringContainsString('use PHPUnit\Framework\TestCase;', $fileInfo->getContents());
+        self::assertStringContainsString('use WickedOne\Muppet\Tests\Stub\Model\StubModel;', $fileInfo->getContents());
+        self::assertStringContainsString('@author foo <bar@qux.com>', $fileInfo->getContents());
 
         unlink($fileInfo->getPathname());
 

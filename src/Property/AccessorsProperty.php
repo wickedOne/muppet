@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace WickedOne\Muppet\Property;
 
-use Laminas\Code\Generator\AbstractMemberGenerator;
-use Laminas\Code\Generator\PropertyGenerator;
+use Nette\PhpGenerator\Property;
 use WickedOne\Muppet\Contract\PropertyInterface;
 use WickedOne\Muppet\Tools\Accessor;
 
@@ -27,13 +26,14 @@ final class AccessorsProperty implements PropertyInterface
     /**
      * {@inheritdoc}
      */
-    public function get(string $class): PropertyGenerator
+    public function get(string $class): Property
     {
-        return PropertyGenerator::fromArray([
-            'name' => 'accessors',
-            'visibility' => AbstractMemberGenerator::VISIBILITY_PRIVATE,
-            'defaultvalue' => Accessor::all($class),
-            'static' => true,
-        ]);
+        return (new Property('accessors'))
+            ->setPrivate()
+            ->setStatic()
+            ->setType('array')
+            ->setValue(Accessor::all($class))
+            ->setComment(\PHP_EOL.'@var array<string, array<string, string|null>>')
+        ;
     }
 }

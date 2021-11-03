@@ -44,6 +44,9 @@ class ValuesPropertyTest extends TestCase
         ];
 
         self::assertSame('values', $property->getName());
-        self::assertSame($expected, $property->getDefaultValue()->getValue());
+        self::assertSame($expected, $property->getValue());
+        self::assertTrue($property->isPrivate());
+        self::assertSame('array', $property->getType());
+        self::assertSame(\PHP_EOL.'@var array<string, object|int|bool|string|float|null>', $property->getComment());
     }
 }

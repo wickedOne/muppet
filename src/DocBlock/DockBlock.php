@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace WickedOne\Muppet\DocBlock;
 
-use Laminas\Code\Generator\DocBlockGenerator;
 use WickedOne\Muppet\Contract\DocBlockInterface;
 
 /**
@@ -25,22 +24,17 @@ final class DockBlock implements DocBlockInterface
     /**
      * {@inheritdoc}
      */
-    public function get(string $normalizedName, ?string $author = null): DocBlockGenerator
+    public function get(string $normalizedName, ?string $author = null): iterable
     {
+        $return = [
+            sprintf('%s Test.', $normalizedName),
+        ];
+
         if (null !== $author) {
-            $tags = [
-                [
-                    'name' => 'author',
-                    'description' => $author,
-                ],
-            ];
-        } else {
-            $tags = [];
+            $return[] = \PHP_EOL;
+            $return[] = sprintf('@author %s', $author);
         }
 
-        return DocBlockGenerator::fromArray([
-            'shortDescription' => sprintf('%s Test.', $normalizedName),
-            'tags' => $tags,
-        ]);
+        return $return;
     }
 }

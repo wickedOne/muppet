@@ -29,8 +29,8 @@ class DockBlockTest extends TestCase
     {
         $block = (new DockBlock())->get('foo');
 
-        self::assertCount(0, $block->getTags());
-        self::assertSame('foo Test.', $block->getShortDescription());
+        self::assertCount(1, $block);
+        self::assertSame('foo Test.', $block[0]);
     }
 
     /**
@@ -40,7 +40,7 @@ class DockBlockTest extends TestCase
     {
         $block = (new DockBlock())->get('foo', 'henk <henk@example.com>');
 
-        self::assertCount(1, $block->getTags());
-        self::assertSame('author', $block->getTags()[0]->getName());
+        self::assertCount(3, $block);
+        self::assertStringContainsString('author', $block[2]);
     }
 }

@@ -30,5 +30,6 @@ class ValueMethodTest extends TestCase
         $method = (new ValueMethod())->get('Foo');
 
         self::assertSame('value', $method->getName());
+        self::assertNotEmpty($method->getBody());
     }
 }

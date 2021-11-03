@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace WickedOne\Muppet\Property;
 
-use Laminas\Code\Generator\AbstractMemberGenerator;
-use Laminas\Code\Generator\PropertyGenerator;
+use Nette\PhpGenerator\Property;
 use WickedOne\Muppet\Contract\PropertyInterface;
 use WickedOne\Muppet\Tools\Value;
 
@@ -27,12 +26,13 @@ final class ValuesProperty implements PropertyInterface
     /**
      * {@inheritDoc}
      */
-    public function get(string $class): PropertyGenerator
+    public function get(string $class): Property
     {
-        return PropertyGenerator::fromArray([
-            'name' => 'values',
-            'visibility' => AbstractMemberGenerator::VISIBILITY_PRIVATE,
-            'defaultvalue' => Value::all($class, true),
-        ]);
+        return (new Property('values'))
+            ->setPrivate()
+            ->setValue(Value::all($class, true))
+            ->setType('array')
+            ->setComment(\PHP_EOL.'@var array<string, object|int|bool|string|float|null>')
+        ;
     }
 }

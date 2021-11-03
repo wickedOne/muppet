@@ -50,10 +50,10 @@ final class Reflection
     }
 
     /**
-     * @param string                                    $class
-     * @param array<int, array<int, class-string|null>> $uses
+     * @param string   $class
+     * @param string[] $uses
      *
-     * @return array<int, array<int, class-string|null>>
+     * @return string[]
      *
      * @phpstan-param class-string $class
      */
@@ -66,7 +66,7 @@ final class Reflection
         }
 
         foreach ($fqns as $fqn) {
-            $uses[] = [\get_class($fqn), null];
+            $uses[] = \get_class($fqn);
         }
 
         return $uses;

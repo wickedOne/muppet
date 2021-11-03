@@ -31,6 +31,10 @@ class ClassPropertyTest extends TestCase
         $property = (new ClassProperty())->get(StubModel::class);
 
         self::assertSame('class', $property->getName());
-        self::assertSame(StubModel::class, $property->getDefaultValue()->getValue());
+        self::assertSame(StubModel::class, $property->getValue());
+        self::assertTrue($property->isPrivate());
+        self::assertTrue($property->isStatic());
+        self::assertSame('string', $property->getType());
+        self::assertStringContainsString(\PHP_EOL.'@var class-string', $property->getComment());
     }
 }

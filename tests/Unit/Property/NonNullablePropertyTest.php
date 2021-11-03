@@ -31,7 +31,11 @@ class NonNullablePropertyTest extends TestCase
         $property = (new NonNullableProperty())->get(StubModel::class);
 
         self::assertSame('nonNullable', $property->getName());
-        self::assertArrayHasKey('name', $property->getDefaultValue()->getValue());
-        self::assertArrayNotHasKey('value', $property->getDefaultValue()->getValue());
+        self::assertContains('name', $property->getValue());
+        self::assertNotContains('value', $property->getValue());
+        self::assertTrue($property->isPrivate());
+        self::assertTrue($property->isStatic());
+        self::assertSame('array', $property->getType());
+        self::assertStringContainsString(\PHP_EOL.'@var string[]', $property->getComment());
     }
 }

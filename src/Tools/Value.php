@@ -13,7 +13,9 @@ declare(strict_types=1);
 namespace WickedOne\Muppet\Tools;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use phpDocumentor\Reflection\Types\Array_;
+use phpDocumentor\Reflection\Types\Object_;
 use Roave\BetterReflection\BetterReflection;
 use Roave\BetterReflection\Reflection\ReflectionProperty;
 use WickedOne\Muppet\Exception\LogicException;
@@ -45,10 +47,6 @@ final class Value
                 continue;
             }
 
-            if (false === $includeNullable && \in_array($type->getName(), ['array', ArrayCollection::class], true)) {
-                continue;
-            }
-
             $value = !class_exists((string) $type) ? self::getValue($property, $includeNullable) : (string) $type;
             $properties[$property->getName()] = $value;
         }
@@ -64,11 +62,7 @@ final class Value
      */
     public static function getValue(ReflectionProperty $property, bool $includeNullable)
     {
-        if (!$includeNullable && $property->allowsNull()) {
-            return null;
-        }
-
-        if (!$includeNullable && \in_array((string) $property->getType(), ['array', ArrayCollection::class], true)) {
+        if (false === $includeNullable && $property->allowsNull()) {
             return null;
         }
 
@@ -83,16 +77,21 @@ final class Value
                 return self::scalarToValue($namedType);
             case 'array':
             case ArrayCollection::class:
+            case Collection::class:
                 $types = $property->getDocBlockTypes();
 
                 if (!isset($types[0])) {
                     return null;
                 }
 
-                /** @var Array_[] $types */
-                $valueType = (string) $types[0]->getValueType();
+                if ($types[0] instanceof Object_) {
+                    $valueType = (string) $types[0]->getFqsen();
+                } else {
+                    /** @var Array_[] $types */
+                    $valueType = (string) $types[0]->getValueType();
+                }
 
-                return class_exists($valueType) ? $valueType : self::scalarToValue($valueType);
+                return class_exists($valueType, true) ? $valueType : self::scalarToValue($valueType);
             default:
                 if (class_exists($namedType)) {
                     return $namedType;

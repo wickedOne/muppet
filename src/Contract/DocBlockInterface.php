@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace WickedOne\Muppet\Contract;
 
-use Laminas\Code\Generator\DocBlockGenerator;
-
 /**
  * DocBlock Interface.
  *
@@ -25,7 +23,7 @@ interface DocBlockInterface
      * @param string      $normalizedName
      * @param string|null $author
      *
-     * @return \Laminas\Code\Generator\DocBlockGenerator
+     * @return iterable<string>
      */
-    public function get(string $normalizedName, ?string $author): DocBlockGenerator;
+    public function get(string $normalizedName, ?string $author): iterable;
 }

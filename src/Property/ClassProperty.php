@@ -12,12 +12,11 @@ declare(strict_types=1);
 
 namespace WickedOne\Muppet\Property;
 
-use Laminas\Code\Generator\AbstractMemberGenerator;
-use Laminas\Code\Generator\PropertyGenerator;
+use Nette\PhpGenerator\Property;
 use WickedOne\Muppet\Contract\PropertyInterface;
 
 /**
- * ClassProperty.
+ * Class Property.
  *
  * @author wicliff <wicliff.wolda@gmail.com>
  */
@@ -26,13 +25,14 @@ final class ClassProperty implements PropertyInterface
     /**
      * {@inheritdoc}
      */
-    public function get(string $class): PropertyGenerator
+    public function get(string $class): Property
     {
-        return PropertyGenerator::fromArray([
-            'name' => 'class',
-            'visibility' => AbstractMemberGenerator::VISIBILITY_PRIVATE,
-            'defaultvalue' => $class,
-            'static' => true,
-        ]);
+        return (new Property('class'))
+            ->setPrivate()
+            ->setStatic()
+            ->setType('string')
+            ->setValue($class)
+            ->setComment(\PHP_EOL.'@var class-string')
+        ;
     }
 }

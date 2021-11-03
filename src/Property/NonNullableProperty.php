@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace WickedOne\Muppet\Property;
 
-use Laminas\Code\Generator\AbstractMemberGenerator;
-use Laminas\Code\Generator\PropertyGenerator;
+use Nette\PhpGenerator\Property;
 use WickedOne\Muppet\Contract\PropertyInterface;
 use WickedOne\Muppet\Tools\Value;
 
@@ -27,13 +26,14 @@ final class NonNullableProperty implements PropertyInterface
     /**
      * {@inheritDoc}
      */
-    public function get(string $class): PropertyGenerator
+    public function get(string $class): Property
     {
-        return PropertyGenerator::fromArray([
-            'name' => 'nonNullable',
-            'visibility' => AbstractMemberGenerator::VISIBILITY_PRIVATE,
-            'defaultvalue' => Value::all($class, false),
-            'static' => true,
-        ]);
+        return (new Property('nonNullable'))
+            ->setPrivate()
+            ->setStatic()
+            ->setType('array')
+            ->setValue(array_keys(Value::all($class, false)))
+            ->setComment(\PHP_EOL.'@var string[]')
+        ;
     }
 }

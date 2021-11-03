@@ -12,9 +12,7 @@ declare(strict_types=1);
 
 namespace WickedOne\Muppet;
 
-use Laminas\Code\Generator\ClassGenerator;
-use Laminas\Code\Generator\FileGenerator;
-use Laminas\Code\Generator\ValueGenerator;
+use Nette\PhpGenerator\PhpFile;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use WickedOne\Muppet\Config\Config;
@@ -22,9 +20,7 @@ use WickedOne\Muppet\Config\FileConfig;
 use WickedOne\Muppet\Contract\DocBlockInterface;
 use WickedOne\Muppet\DocBlock\DockBlock;
 use WickedOne\Muppet\Exception\RuntimeException;
-use WickedOne\Muppet\Method\NullifyPropertyValueMethod;
 use WickedOne\Muppet\Method\ReadWriteTestMethod;
-use WickedOne\Muppet\Method\RemovePropertyValueMethod;
 use WickedOne\Muppet\Method\ValueMethod;
 use WickedOne\Muppet\Property\AccessorsProperty;
 use WickedOne\Muppet\Property\ClassProperty;
@@ -91,36 +87,43 @@ final class Generator
         foreach ($this->finder->name(sprintf('%s.php', $fileName))->files() as $file) {
             $fileConfig = new FileConfig($file, $this->config);
 
-            $file = FileGenerator::fromArray([
-                'filename' => $fileConfig->getTestFileName(),
-                'namespace' => $fileConfig->getTestNameSpace(),
-                'uses' => Reflection::uses($fileConfig->getFqns(), [[TestCase::class, null]]),
-                'declares' => [
-                    'strict_types' => 1,
-                ],
-            ]);
+            $file = (new PhpFile())
+                ->setStrictTypes()
+            ;
 
-            $class = ClassGenerator::fromArray([
-                'name' => sprintf('%sTest', $fileConfig->getFile()),
-                'flags' => ClassGenerator::FLAG_FINAL,
-                'extendedclass' => new ValueGenerator('TestCase', ValueGenerator::TYPE_CONSTANT),
-            ]);
+            $namespace = $file->addNamespace($fileConfig->getTestNameSpace());
+            $namespace->addUse(TestCase::class);
 
-            $class
-                ->setDocBlock($this->docBlock->get($fileConfig->getNormalizedName(), $this->config->getAuthor()));
+            foreach (Reflection::uses($fileConfig->getFqns()) as $use) {
+                $namespace->addUse($use);
+            }
+
+            $class = $namespace->addClass(sprintf('%sTest', $fileConfig->getFile()))
+                ->addExtend(TestCase::class)
+                ->setFinal()
+            ;
+
+            foreach ($this->docBlock->get($fileConfig->getNormalizedName(), $this->config->getAuthor()) as $comment) {
+                $class->addComment($comment);
+            }
+
+            $properties = [];
 
             foreach ($this->properties as $property) {
-                $class->addPropertyFromGenerator($property->get($fileConfig->getFqns()));
+                $properties[] = $property->get($fileConfig->getFqns());
             }
+
+            $class->setProperties($properties);
+
+            $methods = [];
 
             foreach ($this->methods as $method) {
-                $class->addMethodFromGenerator($method->get($fileConfig->getFile()));
+                $methods[] = $method->get($fileConfig->getFile());
             }
 
-            $file
-                ->setClass($class)
-                ->write()
-            ;
+            $class->setMethods($methods);
+
+            file_put_contents($fileConfig->getTestFileName(), $file);
         }
 
         if (!isset($fileConfig)) {
@@ -150,8 +153,6 @@ final class Generator
     {
         return [
             new ReadWriteTestMethod(),
-            new RemovePropertyValueMethod(),
-            new NullifyPropertyValueMethod(),
             new ValueMethod(),
         ];
     }
