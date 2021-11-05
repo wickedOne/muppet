@@ -1,6 +1,12 @@
 # muppet
 unit testing your getters, setters, adders, removers, issers and whatevers.
 
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FwickedOne%2Fmuppet%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/wickedOne/muppet/master)
+[![codecov](https://codecov.io/gh/wickedOne/muppet/branch/master/graph/badge.svg)](https://codecov.io/gh/solrphp/solarium-bundle)
+[![PHPStan static analysis](https://github.com/wickedOne/muppet/actions/workflows/phpstan.yml/badge.svg)](https://github.com/solrphp/solarium-bundle/actions/workflows/phpstan.yml)
+[![coding standards](https://github.com/wickedOne/muppet/actions/workflows/coding-standards.yml/badge.svg)](https://github.com/solrphp/solarium-bundle/actions/workflows/coding-standards.yml)
+
+
 ## but why?
 a lot has been written about the necessity of testing your getters and setters or why it shouldn't been done.
 from my personal perspective, testing getters and setters provide a stable level of coverage
