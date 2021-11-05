@@ -39,3 +39,6 @@ because we love those...
 
 - iterable properties use adders and removers rather than setters
 - ``Tests`` is part of the tests namespace
+
+## symfony integration
+please see the [muppet-bundle](https://github.com/wickedOne/muppet-bundle)
