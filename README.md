@@ -6,6 +6,11 @@ unit testing your getters, setters, adders, removers, issers and whatevers.
 [![PHPStan static analysis](https://github.com/wickedOne/muppet/actions/workflows/phpstan.yml/badge.svg)](https://github.com/solrphp/solarium-bundle/actions/workflows/phpstan.yml)
 [![coding standards](https://github.com/wickedOne/muppet/actions/workflows/coding-standards.yml/badge.svg)](https://github.com/solrphp/solarium-bundle/actions/workflows/coding-standards.yml)
 
+## installation
+to add this library to your dev dependencies use
+```bash
+composer require --dev wickedone/muppet
+```
 
 ## but why?
 a lot has been written about the necessity of testing your getters and setters or why it shouldn't been done.
