@@ -43,6 +43,7 @@ $config = new Config([
 because we love those...
 
 - iterable properties use adders and removers rather than setters
+- removers return booleans: true on removal, false otherwise
 - ``Tests`` is part of the tests namespace
 
 ## symfony integration
