@@ -31,17 +31,17 @@ class FileConfigTest extends TestCase
     public function testFileConfig(): void
     {
         $fileInfo = new SplFileInfo(__DIR__.'/../../../src/Template/TestTemplate.php', __DIR__.'/../../../src/Template/TestTemplate.php', __DIR__.'/../../../src/Template');
-        $config = new Config([
-            'base_dir' => __DIR__.'/////',
-            'test_dir' => __DIR__.'/////',
-            'author' => 'foo <bar@qux.com>',
-            'fragments' => [
+        $config = new Config(
+            __DIR__.'/////',
+            __DIR__.'/////',
+            [
                 'WickedOne',
                 'Muppet',
                 'Tests',
                 'Unit',
             ],
-        ]);
+            'foo <bar@qux.com>'
+        );
 
         $fileConfig = new FileConfig($fileInfo, $config);
 
@@ -62,6 +62,33 @@ class FileConfigTest extends TestCase
     }
 
     /**
+     * test generating correct namespace when fragments have keys which are out of sync.
+     */
+    public function testArrayValues(): void
+    {
+        $fileInfo = new SplFileInfo(__DIR__.'/../../../src/Template/TestTemplate.php', __DIR__.'/../../../src/Template/TestTemplate.php', __DIR__.'/../../../src/Template');
+        $config = new Config(
+            __DIR__.'/////',
+            __DIR__.'/////',
+            [
+                2 => 'WickedOne',
+                3 => 'Muppet',
+                4 => 'Tests',
+                5 => 'Unit',
+            ],
+            'foo <bar@qux.com>'
+        );
+
+        $fileConfig = new FileConfig($fileInfo, $config);
+
+        self::assertSame('WickedOne\\Muppet\\Tests\\Unit\\Template', $fileConfig->getTestNameSpace());
+
+        $path = $fileConfig->getTestPath();
+
+        rmdir($path);
+    }
+
+    /**
      * test no namespace.
      */
     public function testNoNamespace(): void
@@ -70,17 +97,17 @@ class FileConfigTest extends TestCase
         $this->expectExceptionMessage('no namespace found for foo.php');
 
         $fileInfo = new SplFileInfo(__DIR__.'/../../Stub/foo.php', __DIR__.'/../../Stub/foo.php', __DIR__.'/../../Stub/foo.php');
-        $config = new Config([
-            'base_dir' => __DIR__,
-            'test_dir' => __DIR__,
-            'author' => 'foo <bar@qux.com>',
-            'fragments' => [
+        $config = new Config(
+            __DIR__.'/////',
+            __DIR__.'/////',
+            [
                 'WickedOne',
                 'Muppet',
                 'Tests',
                 'Unit',
             ],
-        ]);
+            'foo <bar@qux.com>'
+        );
 
         new FileConfig($fileInfo, $config);
     }
@@ -91,16 +118,16 @@ class FileConfigTest extends TestCase
     public function testNoTestsNamespace(): void
     {
         $fileInfo = new SplFileInfo(__DIR__.'/../../../src/Template/TestTemplate.php', __DIR__.'/../../../src/Template/TestTemplate.php', __DIR__.'/../../../src/Template');
-        $config = new Config([
-            'base_dir' => __DIR__,
-            'test_dir' => __DIR__,
-            'author' => 'foo <bar@qux.com>',
-            'fragments' => [
+        $config = new Config(
+            __DIR__.'/////',
+            __DIR__.'/////',
+            [
                 'WickedOne',
                 'Muppet',
                 'Unit',
             ],
-        ]);
+            'foo <bar@qux.com>'
+        );
 
         $fileConfig = new FileConfig($fileInfo, $config);
 

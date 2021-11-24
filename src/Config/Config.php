@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace WickedOne\Muppet\Config;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
 /**
  * Config.
  *
@@ -22,34 +20,45 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 final class Config
 {
     /**
-     * @var \Symfony\Component\OptionsResolver\OptionsResolver
+     * @var array
      */
-    private static OptionsResolver $resolver;
+    private array $fragments;
 
     /**
-     * @var array<string, string|string[]|null>
+     * @var string
      */
-    private array $options;
+    private string $baseDir;
 
     /**
-     * @param array<string, string|string[]|null> $options
+     * @var string
      */
-    public function __construct(array $options = [])
+    private string $testDir;
+
+    /**
+     * @var string|null
+     */
+    private ?string $author;
+
+    /**
+     * @param string      $baseDir
+     * @param string      $testDir
+     * @param array       $fragments
+     * @param string|null $author
+     */
+    public function __construct(string $baseDir, string $testDir, array $fragments, ?string $author = null)
     {
-        if (!isset(self::$resolver)) {
-            self::$resolver = new OptionsResolver();
-            $this->configureOptions(self::$resolver);
-        }
-
-        $this->options = self::$resolver->resolve($options);
+        $this->fragments = $fragments;
+        $this->baseDir = $baseDir;
+        $this->testDir = $testDir;
+        $this->author = $author;
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     public function getFragments(): array
     {
-        return $this->options['fragments'];
+        return $this->fragments;
     }
 
     /**
@@ -57,7 +66,7 @@ final class Config
      */
     public function getBaseDir(): string
     {
-        return $this->options['base_dir'];
+        return $this->baseDir;
     }
 
     /**
@@ -65,7 +74,7 @@ final class Config
      */
     public function getTestDir(): string
     {
-        return $this->options['test_dir'];
+        return $this->testDir;
     }
 
     /**
@@ -73,24 +82,6 @@ final class Config
      */
     public function getAuthor(): ?string
     {
-        return $this->options['author'];
-    }
-
-    /**
-     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver
-     */
-    private function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'author' => null,
-        ]);
-
-        $resolver
-            ->setRequired(['fragments', 'base_dir', 'test_dir'])
-            ->setAllowedTypes('fragments', 'array')
-            ->setAllowedTypes('base_dir', 'string')
-            ->setAllowedTypes('test_dir', 'string')
-            ->setAllowedTypes('author', ['string', 'null'])
-        ;
+        return $this->author;
     }
 }

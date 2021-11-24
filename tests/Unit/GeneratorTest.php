@@ -36,17 +36,17 @@ class GeneratorTest extends TestCase
      */
     public function testGenerate(): void
     {
-        $config = new Config([
-            'base_dir' => __DIR__,
-            'test_dir' => __DIR__,
-            'author' => 'foo <bar@qux.com>',
-            'fragments' => [
+        $config = new Config(
+            __DIR__,
+            __DIR__,
+            [
                 'Foo',
                 'Bar',
                 'Tests',
                 'Unit',
             ],
-        ]);
+            'foo <bar@qux.com>'
+        );
 
         $docBlock = $this->getMockBuilder(DocBlockInterface::class)->getMock();
         $docBlock->expects(self::once())->method('get')->willReturn([]);
@@ -76,17 +76,17 @@ class GeneratorTest extends TestCase
      */
     public function testDefaultMethodsAndProperties(): void
     {
-        $config = new Config([
-            'base_dir' => __DIR__.'/../Stub',
-            'test_dir' => __DIR__,
-            'author' => 'foo <bar@qux.com>',
-            'fragments' => [
+        $config = new Config(
+            __DIR__.'/../Stub',
+            __DIR__,
+            [
                 'WickedOne',
                 'Muppet',
                 'Tests',
                 'Unit',
             ],
-        ]);
+            'foo <bar@qux.com>'
+        );
 
         $generator = new Generator($config);
 
@@ -119,17 +119,17 @@ class GeneratorTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('no file found for foo');
 
-        $config = new Config([
-            'base_dir' => __DIR__,
-            'test_dir' => __DIR__,
-            'author' => 'foo <bar@qux.com>',
-            'fragments' => [
+        $config = new Config(
+            __DIR__,
+            __DIR__,
+            [
                 'Foo',
                 'Bar',
                 'Test',
                 'Unit',
             ],
-        ]);
+            'foo <bar@qux.com>'
+        );
 
         $generator = new Generator($config);
 
