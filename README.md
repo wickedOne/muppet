@@ -2,6 +2,7 @@
 unit testing your getters, setters, adders, removers, issers and whatevers.
 
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FwickedOne%2Fmuppet%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/wickedOne/muppet/master)
+[![Type Coverage](https://shepherd.dev/github/wickedOne/muppet/coverage.svg)](https://shepherd.dev/github/wickedOne/muppet)
 [![codecov](https://codecov.io/gh/wickedOne/muppet/branch/master/graph/badge.svg)](https://codecov.io/gh/solrphp/solarium-bundle)
 [![PHPStan static analysis](https://github.com/wickedOne/muppet/actions/workflows/phpstan.yml/badge.svg)](https://github.com/solrphp/solarium-bundle/actions/workflows/phpstan.yml)
 [![coding standards](https://github.com/wickedOne/muppet/actions/workflows/coding-standards.yml/badge.svg)](https://github.com/solrphp/solarium-bundle/actions/workflows/coding-standards.yml)
@@ -23,16 +24,18 @@ it does however generate test classes which are easy to modify and, most importa
 
 ## usage
 ```php
-$config = new Config([
-  'base_dir' => '~/Code/Project/src',
-  'test_dir' => '~/Code/Project/tests/Unit',
-  'fragments' => [
-      'Awesome',
-      'Namespace',
-      'Tests',
-      'Unit',
-    ],
-]);
+$config = new Config(
+  '~/Code/Project/src',  // base dir
+  '~/Code/Project/tests/Unit', // tests dir
+  // namespace fragments
+  [
+    'Awesome',
+    'Namespace',
+    'Tests',
+    'Unit',
+  ],
+  'foo <bar@qux.com>' // author (optional)
+);
 
 (new Generator($config))
   ->generate('MyEntity')

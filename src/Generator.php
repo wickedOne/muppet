@@ -42,12 +42,12 @@ final class Generator implements GeneratorInterface
     private Config $config;
 
     /**
-     * @var \WickedOne\Muppet\Contract\PropertyInterface[]
+     * @var iterable<\WickedOne\Muppet\Contract\PropertyInterface>
      */
     private iterable $properties;
 
     /**
-     * @var \WickedOne\Muppet\Contract\MethodInterface[]
+     * @var iterable<\WickedOne\Muppet\Contract\MethodInterface>
      */
     private iterable $methods;
 
@@ -135,7 +135,7 @@ final class Generator implements GeneratorInterface
     }
 
     /**
-     * @return \WickedOne\Muppet\Contract\PropertyInterface[]
+     * @return iterable<\WickedOne\Muppet\Contract\PropertyInterface>
      */
     private function defaultProperties(): iterable
     {
@@ -148,7 +148,7 @@ final class Generator implements GeneratorInterface
     }
 
     /**
-     * @return \WickedOne\Muppet\Contract\MethodInterface[]
+     * @return iterable<\WickedOne\Muppet\Contract\MethodInterface>
      */
     private function defaultMethods(): iterable
     {
